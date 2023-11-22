@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>901697229886-20gk4f7p206v4knkmeibssnipmdrhplq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.901697229886-20gk4f7p206v4knkmeibssnipmdrhplq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBTdNXvJ4tPbG0Ee97_dTpI8OmAx4lkHaQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>901697229886</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>Siu.Reportes-Vistas</string>
+	<key>PROJECT_ID</key>
+	<string>pueblareciclaapp</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pueblareciclaapp.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:901697229886:ios:2cf7d3a21149facda32d6f</string>
+	<key>DATABASE_URL</key>
+	<string>https://pueblareciclaapp-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
