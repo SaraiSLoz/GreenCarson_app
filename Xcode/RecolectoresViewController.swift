@@ -23,6 +23,7 @@ class RecolectoresViewController: UIViewController {
         showCollectorsInService()
     }
     
+    // Funcion para colocar grafica en pantalla
     func setupView(){
             let controller = UIHostingController(rootView: TimeHistory())
             guard let timeView = controller.view else {
@@ -39,6 +40,7 @@ class RecolectoresViewController: UIViewController {
             }
         }
     
+    // Funcion para mostrar el numero de recolectores en total
     func showCollectors() {
         let db = Firestore.firestore()
         let collectorsCollection = db.collection("recolectores")
@@ -56,6 +58,8 @@ class RecolectoresViewController: UIViewController {
         }
     }
     
+    // Funcion para mostrar el numero de recolectores en servicio
+    // Calculados por medio de su ultima recoleccion registrada
     func showCollectorsInService() {
         let db = Firestore.firestore()
         let collectorsCollection = db.collection("recolecciones")
