@@ -2,12 +2,14 @@ import SwiftUI
 import FirebaseFirestore
 import Charts
 
+// Estructura para materiales
 struct MaterialModel: Identifiable {
     let id: String
-    let cantidad: Int
+    var cantidad: Int
     let imageName: String
 }
 
+// Estructura para la grafica de materiales
 struct MaterialsChart: View {
     @State private var materialsList: [MaterialModel] = []
 
@@ -20,21 +22,26 @@ struct MaterialsChart: View {
             }
         }
         .onAppear {
+            // Carga los datos locales primero
             fetchDataFromLocal()
+            
+            // Luego, actualiza la lista con datos de Firestore
+            fetchDataFromFirestore()
         }
     }
 
+    // Funcion para crear una lista local con imagenes de materiales
     func fetchDataFromLocal() {
-        // Simulando datos locales de materiales
+        // Simulando datos locales, reemplaza esto con tu lógica para cargar datos locales.
         materialsList = [
             MaterialModel(id: "aceite de auto", cantidad: 0, imageName: "material_aceite_auto"),
-            MaterialModel(id: "aceite usado", cantidad: 0, imageName: "material_aceite_usado"),
+            MaterialModel(id: "aceite", cantidad: 0, imageName: "material_aceite_usado"),
             MaterialModel(id: "árbol", cantidad: 0, imageName: "material_arbol"),
             MaterialModel(id: "baterias", cantidad: 0, imageName: "material_baterias"),
             MaterialModel(id: "bici", cantidad: 0, imageName: "material_bici"),
             MaterialModel(id: "botellas", cantidad: 0, imageName: "material_botellas"),
             MaterialModel(id: "carton", cantidad: 0, imageName: "material_carton"),
-            MaterialModel(id: "electronicos", cantidad: 0, imageName: "material_electronicos"),
+            MaterialModel(id: "electrónicos", cantidad: 0, imageName: "material_electronicos"),
             MaterialModel(id: "escombro", cantidad: 0, imageName: "material_escombro"),
             MaterialModel(id: "industriales", cantidad: 0, imageName: "material_industriales"),
             MaterialModel(id: "juguetes", cantidad: 0, imageName: "material_juguetes"),
@@ -51,17 +58,84 @@ struct MaterialsChart: View {
             MaterialModel(id: "ropa", cantidad: 0, imageName: "material_ropa"),
             MaterialModel(id: "tapitas", cantidad: 0, imageName: "material_tapitas"),
             MaterialModel(id: "tetrapack", cantidad: 0, imageName: "material_tetrapack"),
-            MaterialModel(id: "toner", cantidad: 5, imageName: "material_toner"),
-            MaterialModel(id: "voluminoso", cantidad: 7, imageName: "material_voluminoso"),
+            MaterialModel(id: "toner", cantidad: 0, imageName: "material_toner"),
+            MaterialModel(id: "voluminoso", cantidad: 0, imageName: "material_voluminoso"),
             MaterialModel(id: "otro", cantidad: 0, imageName: "material_carton"),
         ]
     }
+    
+    // Funcion para obtener los datos con Firebase
+    func fetchDataFromFirestore() {
+        let db = Firestore.firestore()
+
+        // Consulta las recolecciones con estado "Completada" y fecha del mes actual
+        db.collection("recolecciones")
+            .whereField("estado", isEqualTo: "Completada")
+            .getDocuments { querySnapshot, error in
+                guard let documents = querySnapshot?.documents else {
+                    print("Error fetching documents: \(error!)")
+                    return
+                }
+
+                for document in documents {
+                    // Accede al campo "fechaRecoleccion"
+                    if let fechaRecoleccion = document["fechaRecoleccion"] as? String {
+                        // Filtra por el mes actual
+                        if filterByCurrentMonth(dateString: fechaRecoleccion) {
+                            // Accede al campo "materiales" que es un mapa
+                            if let materiales = document["materiales"] as? [String: [String: Any]] {
+                                // Itera a través de los materiales y actualiza la cantidad en materialsList
+                                for (_, material) in materiales {
+                                    if let nombre = material["nombre"] as? String {
+                                        // Llamada a la función para actualizar la cantidad
+                                        updateMaterialCount(nombre: nombre)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+    }
+
+    // Funcion para validar si un elemento es de la fecha actual
+    func filterByCurrentMonth(dateString: String) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        guard let date = dateFormatter.date(from: dateString) else {
+            return false
+        }
+        
+        let calendar = Calendar.current
+        let currentMonth = calendar.component(.month, from: Date())
+        let recoleccionMonth = calendar.component(.month, from: date)
+        
+        return currentMonth == recoleccionMonth
+    }
+    
+    // Funcion para actualizar la lista local
+    func updateMaterialCount(nombre: String) {
+        // Convierte a minúsculas para comparación sin distinción entre mayúsculas y minúsculas
+        let lowercaseNombre = nombre.lowercased()
+        // Busca el MaterialModel correspondiente en la lista
+        if let index = materialsList.firstIndex(where: { $0.id.lowercased() == lowercaseNombre }) {
+            // Si se encuentra, incrementa la cantidad
+            materialsList[index].cantidad += 1
+        } else {
+            // Si no se encuentra, incrementa la cantidad de "otro"
+            if let otroIndex = materialsList.firstIndex(where: { $0.id == "otro" }) {
+                materialsList[otroIndex].cantidad += 1
+                print("Analizando material:", lowercaseNombre)
+            }
+        }
+    }
 }
 
+// Esctructura de grafica de barras
 struct BarChartView: View {
     let data: [MaterialModel]
 
-    // Se crea vista de grafica de barras
     var body: some View {
         Chart(data) { materialModel in
             BarMark(
@@ -70,15 +144,19 @@ struct BarChartView: View {
             )
             .annotation(position: .trailing, alignment: .center) {
                 if materialModel.cantidad != 0 {
-                    VStack {
-                        Text("\(materialModel.cantidad)")
+                    ZStack(alignment: .topTrailing) {
                         Image(materialModel.imageName)
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 50, height: 50)
+                            .frame(width: 25, height: 25)
+
+                        Text("\(materialModel.cantidad)")
+                            .font(.system(size: 12)) // Tamaño del texto
+                            .foregroundColor(.black) // Color del texto
                     }
                 }
             }
+
         }
         .chartXAxisLabel("Nombre")
         .chartYAxisLabel("Cantidad")

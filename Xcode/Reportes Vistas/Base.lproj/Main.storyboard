@@ -932,7 +932,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DPt-k5-bMe">
                                 <rect key="frame" x="64" y="198" width="264" height="53"/>
                                 <attributedString key="attributedText">
-                                    <fragment content="Recolecciones en los últimos 30 días:">
+                                    <fragment content="Recolecciones en el último mes:">
                                         <attributes>
                                             <font key="NSFont" size="20" name="Arial-BoldMT"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
