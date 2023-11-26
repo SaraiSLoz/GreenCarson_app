@@ -7,25 +7,53 @@
 
 import UIKit
 import Firebase
-import Foundation
 import FirebaseAuth
-import FirebaseCore
 
 class ViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var user: UITextField!
     @IBOutlet weak var password: UITextField!
+    let backgroundImageView = UIImageView()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        addGradient()
         self.navigationItem.setHidesBackButton(true, animated: false)
+        
+        
+        // Verificar el estado de la sesión al cargar la vista
+        if loadSessionState() {
+            // Si el usuario está autenticado, ir directamente a la siguiente vista
+            self.performSegue(withIdentifier: "loginSeg", sender: self)
+        }
 
         // Do any additional setup after loading the view.
         password.delegate = self
         password.isSecureTextEntry = true
     }
     
+    func addGradient() {
+          // Crear la capa de gradiente
+          let gradientLayer = CAGradientLayer()
+
+          // Definir los colores del gradiente
+          gradientLayer.colors = [
+              UIColor(red: 71/255, green: 186/255, blue: 108/255, alpha: 1).cgColor,
+              UIColor(red: 10/255, green: 185/255, blue: 156/255, alpha: 1).cgColor,
+              UIColor(red: 68/255, green: 137/255, blue: 202/255, alpha: 1).cgColor
+          ]
+
+          // Definir la dirección del gradiente
+          gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+          gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
+
+          // Asegurar que el gradiente abarque desde la mitad hacia abajo
+        gradientLayer.frame = CGRect(x: 0, y: view.bounds.height * 0.15, width: view.bounds.width, height: view.bounds.height * 0.65)
+
+          // Insertar el gradiente como la primera capa de la vista
+          view.layer.insertSublayer(gradientLayer, at: 1)
+      }
+
     @IBAction func loginFun(_ sender: Any) {
         guard let emailUser = user.text?.trimmingCharacters(in: .whitespacesAndNewlines),
                 let passUser = password.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {
@@ -48,18 +76,29 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 self.showToast(message: "Inicio de sesión fallido: \(error.localizedDescription)")
             } else {
                 // Inicio de sesión exitoso
-                if let user = Auth.auth().currentUser {
+                if Auth.auth().currentUser != nil {
+                    // Guardar el estado de la sesión
+                    self.saveSessionState()
                     // El usuario está autenticado, puedes pasar a la siguiente vista o realizar otras acciones
                     self.performSegue(withIdentifier: "loginSeg", sender: self)
                 }
             }
         }
     }
-
+    
     private func showToast(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+    
+    private func saveSessionState() {
+            UserDefaults.standard.set(true, forKey: "isUserLoggedIn")
+        }
+
+        // Función para cargar el estado de la sesión
+    private func loadSessionState() -> Bool {
+        return UserDefaults.standard.bool(forKey: "isUserLoggedIn")
     }
 
 }

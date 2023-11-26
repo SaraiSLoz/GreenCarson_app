@@ -9,9 +9,14 @@ import UIKit
 
 class areasMejoraViewController: UIViewController {
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        navigationItem.backBarButtonItem = backButton
+        
         // Do any additional setup after loading the view.
     }
 

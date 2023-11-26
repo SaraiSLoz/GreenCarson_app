@@ -13,7 +13,6 @@ class DoughnutChartView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     private func setupChart() {
         let chartView = PieChartView()
         chartView.noDataText = "" // Ocultar el mensaje cuando no hay datos
@@ -47,5 +46,9 @@ class DoughnutChartView: UIView {
         chartView.holeColor = NSUIColor.clear
         chartView.holeRadiusPercent = 0.7
         chartView.drawEntryLabelsEnabled = false // No mostrar etiquetas dentro de la gráfica
+
+        // Add animation
+        chartView.animate(xAxisDuration: 2.0, easingOption: .easeOutQuad)
     }
+
 }

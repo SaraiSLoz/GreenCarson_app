@@ -12,20 +12,24 @@ struct UserAgeModel: Identifiable {
     let age: Int
     let userCount: Int
     let color: Color
+    var animate: Bool = false
 }
 
 struct AgeHistory: View {
     @State private var ageList: [UserAgeModel] = []
-
+    
     var body: some View {
         VStack {
             if ageList.isEmpty {
                 Text("Loading data...")
             } else {
+                let max = ageList.max {
+                    item1, item2 in return item2.userCount > item1.userCount
+                }?.userCount ?? 0
                 Chart(ageList) { userAgeModel in
                     BarMark(
                         x: .value("Edad", Double(userAgeModel.age)),
-                        y: .value("Usuarios", Double(userAgeModel.userCount))
+                        y: .value("Usuarios", userAgeModel.animate ? Double(userAgeModel.userCount) : 0)
                     )
                     .annotation(position: .top, alignment: .center) {
                         if userAgeModel.userCount != 0 {
@@ -36,13 +40,21 @@ struct AgeHistory: View {
                 }
                 .chartXAxisLabel("Edades")
                 .chartYAxisLabel("Cantidad de Usuarios")
+                .chartYScale(domain: 0...(max + 10))
+                .onAppear {
+                    withAnimation(.interactiveSpring(response: 0.8, dampingFraction: 0.8, blendDuration: 0.8)) {
+                        for (index, _) in ageList.enumerated(){
+                            ageList[index].animate = true
+                        }
+                    }
+                }
             }
         }
         .onAppear {
             fetchDataFromFirestore()
         }
     }
-
+    
     func fetchDataFromFirestore() {
         let db = Firestore.firestore()
         let collection = db.collection("usuarios")
@@ -78,4 +90,8 @@ struct AgeHistory: View {
             }
         }
     }
+    
+    
+
+
 }

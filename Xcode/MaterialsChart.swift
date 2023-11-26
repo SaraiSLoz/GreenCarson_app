@@ -7,6 +7,7 @@ struct MaterialModel: Identifiable {
     let id: String
     var cantidad: Int
     let imageName: String
+    var animate: Bool = false
 }
 
 // Estructura para la grafica de materiales
@@ -29,7 +30,6 @@ struct MaterialsChart: View {
             fetchDataFromFirestore()
         }
     }
-
     // Funcion para crear una lista local con imagenes de materiales
     func fetchDataFromLocal() {
         // Simulando datos locales, reemplaza esto con tu lógica para cargar datos locales.
@@ -114,7 +114,7 @@ struct MaterialsChart: View {
         return currentMonth == recoleccionMonth
     }
     
-    // Funcion para actualizar la lista local
+    // Funcion para actualizar la grafica local
     func updateMaterialCount(nombre: String) {
         // Convierte a minúsculas para comparación sin distinción entre mayúsculas y minúsculas
         let lowercaseNombre = nombre.lowercased()
@@ -160,6 +160,13 @@ struct BarChartView: View {
         }
         .chartXAxisLabel("Nombre")
         .chartYAxisLabel("Cantidad")
+//        .onAppear {
+//            withAnimation(.interactiveSpring(response: 0.8, dampingFraction: 0.8, blendDuration: 0.8)) {
+//                for (index, _) in data.enumerated(){
+//                    MaterialModel[index].animate = true
+//                }
+//            }
+//        }
     }
 }
 

@@ -15,6 +15,11 @@ class UsuariosViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        navigationItem.backBarButtonItem = backButton
+        
         setupView()
         fetchDataAndSetupChart()
     }

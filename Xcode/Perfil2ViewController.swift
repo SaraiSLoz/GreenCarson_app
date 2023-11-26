@@ -18,6 +18,10 @@ class Perfil2ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        navigationItem.backBarButtonItem = backButton
+        
         // Llama a la función para agregar el subrayado al UITextField
         addBottomLineToTextField(textField: lineado3)
         

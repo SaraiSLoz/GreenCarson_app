@@ -17,8 +17,12 @@ class RecolectoresViewController: UIViewController {
     @IBOutlet weak var numRecolectores: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
         
+        let backButton = UIBarButtonItem()
+        backButton.title = ""
+        navigationItem.backBarButtonItem = backButton
+        
+        setupView()
         showCollectors()
         showCollectorsInService()
     }
