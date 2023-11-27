@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class Perfil2ViewController: UIViewController {
+class Perfil2ViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var lineado3: UITextField!
     
@@ -22,13 +22,16 @@ class Perfil2ViewController: UIViewController {
         let backButton = UIBarButtonItem()
         backButton.title = ""
         navigationItem.backBarButtonItem = backButton
+        lineado3.delegate = self
+        lineado4.delegate = self
         
         // Llama a la función para agregar el subrayado al UITextField
         addBottomLineToTextField(textField: lineado3)
         
         addBottomLineToTextField(textField: lineado4)
-        
+
         lineado3.returnKeyType = .next
+
         lineado4.returnKeyType = .go
         
         lineado3.isSecureTextEntry = true
@@ -45,6 +48,19 @@ class Perfil2ViewController: UIViewController {
         textField.layer.addSublayer(bottomLine)
     }
 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            if textField == lineado3 {
+                // If "Return" is pressed in lineado3, move to the next field
+                lineado4.becomeFirstResponder()
+            } else if textField == lineado4 {
+                // If "Return" is pressed in lineado4, hide the keyboard and perform the button action
+                textField.resignFirstResponder()
+                changePassword(self)
+            }
+
+            return true
+        }
+    
     @IBAction func changePassword(_ sender: Any) {
         // Crear una alerta de confirmación
         let confirmAlert = UIAlertController(title: "Confirmar", message: "¿Está seguro de que desea cambiar la contraseña?", preferredStyle: .alert)
