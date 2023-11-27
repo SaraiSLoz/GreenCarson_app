@@ -19,11 +19,9 @@ class RecolectoresViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         let backButton = UIBarButtonItem()
         backButton.title = ""
         navigationItem.backBarButtonItem = backButton
-            
         setupView()
         setupView2()
         showCollectors()
@@ -206,18 +204,20 @@ class RecolectoresViewController: UIViewController {
     }
 
     // Funcion para crear un documento PDF
-    @IBAction func saveDocumento(_ sender: Any) {
+
+    @IBAction func savePDF(_ sender: Any) {
         // Obtén la fecha actual
         let currentDate = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString = dateFormatter.string(from: currentDate)
         guard let image =  convertViewToImage(tag: 1) else { return }
+        guard let image2 =  convertViewToImage(tag: 2) else { return }
 
         let pdfCreator = PDFCreator(
-            title: "Materiales",
+            title: "Recolectores",
             body: "Fecha de descarga: \(dateString)",
-            images: [image],
+            images: [image, image2],
             contact: ""
         )
         let pdfData = pdfCreator.createFlyer()
@@ -227,5 +227,4 @@ class RecolectoresViewController: UIViewController {
         )
         present(vc, animated: true, completion: nil)
     }
-    
 }
