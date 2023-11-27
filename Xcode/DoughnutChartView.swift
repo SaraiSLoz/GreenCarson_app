@@ -43,12 +43,15 @@ class DoughnutChartView: UIView {
         chartView.data = PieChartData(dataSet: dataSet)
 
         chartView.drawHoleEnabled = true
-        chartView.holeColor = NSUIColor.clear
-        chartView.holeRadiusPercent = 0.7
+        chartView.holeColor = NSUIColor.white
+        chartView.transparentCircleColor = NSUIColor.white
+        chartView.transparentCircleRadiusPercent = 0.05
+        chartView.drawSlicesUnderHoleEnabled = true
+        chartView.holeRadiusPercent = 0.6
         chartView.drawEntryLabelsEnabled = false // No mostrar etiquetas dentro de la gráfica
 
         // Add animation
-        chartView.animate(xAxisDuration: 2.0, easingOption: .easeOutQuad)
+        chartView.animate(xAxisDuration: 0.5, easingOption: .easeInOutCirc)
     }
 
 }

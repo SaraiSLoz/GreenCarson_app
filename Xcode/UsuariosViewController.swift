@@ -39,26 +39,8 @@ class UsuariosViewController: UIViewController {
                 make.height.equalTo(250)
             }
         }
+    
     // Funcion para colocar grafica de dona en pantalla
-    func setupView2() {
-            // Crear la vista del gráfico
-            let doughnutChart = DoughnutChartView(data: [
-                "Campus Status 1": 10,
-                "Campus Status 0": 20
-            ])
-            
-            // Añadir la vista del gráfico como una subvista
-            view.addSubview(doughnutChart)
-            
-            // Establecer las restricciones para la vista del gráfico
-            doughnutChart.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                doughnutChart.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 250),
-                doughnutChart.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 25),
-                doughnutChart.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
-                doughnutChart.heightAnchor.constraint(equalToConstant: 250)
-            ])
-        }
     func fetchDataAndSetupChart() {
             // Realizar una consulta a Firestore para obtener datos
             db.collection("usuarios").getDocuments { [weak self] (snapshot, error) in

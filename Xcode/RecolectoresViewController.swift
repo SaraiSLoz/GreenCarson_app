@@ -21,7 +21,7 @@ class RecolectoresViewController: UIViewController {
         let backButton = UIBarButtonItem()
         backButton.title = ""
         navigationItem.backBarButtonItem = backButton
-        
+            
         setupView()
         showCollectors()
         showCollectorsInService()

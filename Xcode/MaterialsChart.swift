@@ -34,27 +34,29 @@ struct MaterialsChart: View {
     func fetchDataFromLocal() {
         // Simulando datos locales, reemplaza esto con tu lógica para cargar datos locales.
         materialsList = [
-            MaterialModel(id: "aceite de auto", cantidad: 0, imageName: "material_aceite_auto"),
-            MaterialModel(id: "aceite", cantidad: 0, imageName: "material_aceite_usado"),
+            MaterialModel(id: "aceite auto", cantidad: 0, imageName: "material_aceite_auto"),
+            MaterialModel(id: "aceite usado", cantidad: 0, imageName: "material_aceite_usado"),
             MaterialModel(id: "árbol", cantidad: 0, imageName: "material_arbol"),
             MaterialModel(id: "baterias", cantidad: 0, imageName: "material_baterias"),
-            MaterialModel(id: "bici", cantidad: 0, imageName: "material_bici"),
+            MaterialModel(id: "bicicletas", cantidad: 0, imageName: "material_bici"),
             MaterialModel(id: "botellas", cantidad: 0, imageName: "material_botellas"),
-            MaterialModel(id: "carton", cantidad: 0, imageName: "material_carton"),
+            MaterialModel(id: "cartón", cantidad: 0, imageName: "material_carton"),
             MaterialModel(id: "electrónicos", cantidad: 0, imageName: "material_electronicos"),
-            MaterialModel(id: "escombro", cantidad: 0, imageName: "material_escombro"),
+            MaterialModel(id: "escombros", cantidad: 0, imageName: "material_escombro"),
             MaterialModel(id: "industriales", cantidad: 0, imageName: "material_industriales"),
             MaterialModel(id: "juguetes", cantidad: 0, imageName: "material_juguetes"),
+            MaterialModel(id: "lata chilera", cantidad: 0, imageName: "material_metal"),
+            MaterialModel(id: "lata", cantidad: 0, imageName: "material_metal"),
             MaterialModel(id: "libros", cantidad: 0, imageName: "material_libros"),
             MaterialModel(id: "llantas", cantidad: 0, imageName: "material_llantas"),
             MaterialModel(id: "madera", cantidad: 0, imageName: "material_madera"),
             MaterialModel(id: "medicina", cantidad: 0, imageName: "material_medicina"),
             MaterialModel(id: "metal", cantidad: 0, imageName: "material_metal"),
-            MaterialModel(id: "organico", cantidad: 0, imageName: "material_organico"),
+            MaterialModel(id: "orgánico", cantidad: 0, imageName: "material_organico"),
             MaterialModel(id: "pallets", cantidad: 0, imageName: "material_pallets"),
             MaterialModel(id: "papel", cantidad: 0, imageName: "material_papel"),
             MaterialModel(id: "pilas", cantidad: 0, imageName: "material_pilas"),
-            MaterialModel(id: "plasticos", cantidad: 0, imageName: "material_plasticos"),
+            MaterialModel(id: "plásticos", cantidad: 0, imageName: "material_plasticos"),
             MaterialModel(id: "ropa", cantidad: 0, imageName: "material_ropa"),
             MaterialModel(id: "tapitas", cantidad: 0, imageName: "material_tapitas"),
             MaterialModel(id: "tetrapack", cantidad: 0, imageName: "material_tetrapack"),
@@ -88,7 +90,8 @@ struct MaterialsChart: View {
                                 for (_, material) in materiales {
                                     if let nombre = material["nombre"] as? String {
                                         // Llamada a la función para actualizar la cantidad
-                                        updateMaterialCount(nombre: nombre)
+                                        let cantidad = material["cantidad"]
+                                        updateMaterialCount(nombre: nombre, cantidad: cantidad as! Int)
                                     }
                                 }
                             }
@@ -115,17 +118,17 @@ struct MaterialsChart: View {
     }
     
     // Funcion para actualizar la grafica local
-    func updateMaterialCount(nombre: String) {
+    func updateMaterialCount(nombre: String, cantidad: Int) {
         // Convierte a minúsculas para comparación sin distinción entre mayúsculas y minúsculas
         let lowercaseNombre = nombre.lowercased()
         // Busca el MaterialModel correspondiente en la lista
         if let index = materialsList.firstIndex(where: { $0.id.lowercased() == lowercaseNombre }) {
             // Si se encuentra, incrementa la cantidad
-            materialsList[index].cantidad += 1
+            materialsList[index].cantidad += cantidad
         } else {
             // Si no se encuentra, incrementa la cantidad de "otro"
             if let otroIndex = materialsList.firstIndex(where: { $0.id == "otro" }) {
-                materialsList[otroIndex].cantidad += 1
+                materialsList[otroIndex].cantidad += cantidad
                 print("Analizando material:", lowercaseNombre)
             }
         }
@@ -137,6 +140,9 @@ struct BarChartView: View {
     let data: [MaterialModel]
 
     var body: some View {
+        let max = data.max {
+            item1, item2 in return item2.cantidad > item1.cantidad
+        }?.cantidad ?? 0
         Chart(data) { materialModel in
             BarMark(
                 x: .value("Cantidad", Double(materialModel.cantidad)),
@@ -160,13 +166,7 @@ struct BarChartView: View {
         }
         .chartXAxisLabel("Nombre")
         .chartYAxisLabel("Cantidad")
-//        .onAppear {
-//            withAnimation(.interactiveSpring(response: 0.8, dampingFraction: 0.8, blendDuration: 0.8)) {
-//                for (index, _) in data.enumerated(){
-//                    MaterialModel[index].animate = true
-//                }
-//            }
-//        }
+        .chartXScale(domain: 0...(max + 2))
     }
 }
 
