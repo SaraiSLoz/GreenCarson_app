@@ -35,9 +35,9 @@ class DoughnutChartView: UIView {
         }
 
         let dataSet = PieChartDataSet(entries: entries)
-        dataSet.colors = [NSUIColor.red, NSUIColor.green]
+        dataSet.colors = [NSUIColor.red, NSUIColor.systemGreen]
         dataSet.valueTextColor = NSUIColor.black
-        dataSet.valueFont = UIFont.systemFont(ofSize: 12.0)
+        dataSet.valueFont = UIFont.systemFont(ofSize: 14.0)
 
         // Deshabilitar la impresión de descripción
         chartView.data = PieChartData(dataSet: dataSet)
@@ -49,7 +49,6 @@ class DoughnutChartView: UIView {
         chartView.drawSlicesUnderHoleEnabled = true
         chartView.holeRadiusPercent = 0.6
         chartView.drawEntryLabelsEnabled = false // No mostrar etiquetas dentro de la gráfica
-
         // Add animation
         chartView.animate(xAxisDuration: 0.5, easingOption: .easeInOutCirc)
     }

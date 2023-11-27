@@ -24,7 +24,7 @@ class ResiduosViewController: UIViewController  {
     
     // Funcion para colocar grafica en pantalla
     func setupView() {
-        // Obtén la referencia a MaterialsChartView desde el Storyboard usando el tag
+        // Se utiliza el view respecto a su tag
         guard let materialsChartView = self.view.viewWithTag(1) else {
             return
         }
@@ -79,10 +79,11 @@ class ResiduosViewController: UIViewController  {
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let dateString = dateFormatter.string(from: currentDate)
         guard let image =  convertViewToImage(tag: 1) else { return }
+
         let pdfCreator = PDFCreator(
             title: "Materiales",
             body: "Fecha de descarga: \(dateString)",
-            image: image,
+            images: [image],
             contact: ""
         )
         let pdfData = pdfCreator.createFlyer()

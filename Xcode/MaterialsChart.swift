@@ -37,7 +37,7 @@ struct MaterialsChart: View {
             MaterialModel(id: "aceite auto", cantidad: 0, imageName: "material_aceite_auto"),
             MaterialModel(id: "aceite usado", cantidad: 0, imageName: "material_aceite_usado"),
             MaterialModel(id: "árbol", cantidad: 0, imageName: "material_arbol"),
-            MaterialModel(id: "baterias", cantidad: 0, imageName: "material_baterias"),
+            MaterialModel(id: "baterías", cantidad: 0, imageName: "material_baterias"),
             MaterialModel(id: "bicicletas", cantidad: 0, imageName: "material_bici"),
             MaterialModel(id: "botellas", cantidad: 0, imageName: "material_botellas"),
             MaterialModel(id: "cartón", cantidad: 0, imageName: "material_carton"),

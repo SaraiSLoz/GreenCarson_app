@@ -21,7 +21,7 @@ struct AgeHistory: View {
     var body: some View {
         VStack {
             if ageList.isEmpty {
-                Text("Loading data...")
+                Text("Recuperando datos...")
             } else {
                 let max = ageList.max {
                     item1, item2 in return item2.userCount > item1.userCount
@@ -90,8 +90,5 @@ struct AgeHistory: View {
             }
         }
     }
-    
-    
-
-
 }
+

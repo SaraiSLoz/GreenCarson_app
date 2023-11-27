@@ -10,17 +10,17 @@ import PDFKit
 
 
 class PDFCreator: NSObject {
-
+    
     let title: String
     let body: String
-    let image: UIImage
+    let images: [UIImage]  // Cambiado a un array de imágenes
     let contactInfo: String
-
-    init(title: String, body: String, image: UIImage, contact: String) {
-      self.title = title
-      self.body = body
-      self.image = image
-      self.contactInfo = contact
+    
+    init(title: String, body: String, images: [UIImage], contact: String) {
+        self.title = title
+        self.body = body
+        self.images = images
+        self.contactInfo = contact
     }
 
     func createFlyer() -> Data {
@@ -42,17 +42,21 @@ class PDFCreator: NSObject {
       // 3
       let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
       // 4
-      let data = renderer.pdfData { (context) in
-        // 5
-        context.beginPage()
-        // 6
-        let titleBottom = addTitle(pageRect: pageRect)
-        let imageBottom = addImage(pageRect: pageRect, imageTop: titleBottom + 18.0)
-        addBodyText(pageRect: pageRect, textTop: imageBottom + 18.0)
-      }
+        let data = renderer.pdfData { (context) in
+            context.beginPage()
+            let titleBottom = addTitle(pageRect: pageRect)
+            addBodyText(pageRect: pageRect, textTop: titleBottom + 18.0)
+            var imageBottom = titleBottom + 35.0
 
-      return data
-    }
+            // Agregar todas las imágenes una después de la otra
+            for image in images {
+                imageBottom = addImage(pageRect: pageRect, imageTop: imageBottom, image: image)
+                imageBottom += 15.0 // Espacio entre imágenes
+            }
+
+        }
+        return data
+        }
 
     func addTitle(pageRect: CGRect) -> CGFloat {
         
@@ -106,24 +110,21 @@ class PDFCreator: NSObject {
       attributedText.draw(in: textRect)
     }
 
-    func addImage(pageRect: CGRect, imageTop: CGFloat) -> CGFloat {
-      // 1
-      let maxHeight = pageRect.height * 0.4
-      let maxWidth = pageRect.width * 0.8
-      // 2
-      let aspectWidth = maxWidth / image.size.width
-      let aspectHeight = maxHeight / image.size.height
-      let aspectRatio = min(aspectWidth, aspectHeight)
-      // 3
-      let scaledWidth = image.size.width * aspectRatio
-      let scaledHeight = image.size.height * aspectRatio
-      // 4
-      let imageX = (pageRect.width - scaledWidth) / 2.0
-      let imageRect = CGRect(x: imageX, y: imageTop,
-                             width: scaledWidth, height: scaledHeight)
-      // 5
-      image.draw(in: imageRect)
-      return imageRect.origin.y + imageRect.size.height
-    }
+    func addImage(pageRect: CGRect, imageTop: CGFloat, image: UIImage) -> CGFloat {
+            let maxHeight = pageRect.height * 0.4
+            let maxWidth = pageRect.width * 0.8
+            let aspectWidth = maxWidth / image.size.width
+            let aspectHeight = maxHeight / image.size.height
+            let aspectRatio = min(aspectWidth, aspectHeight)
+            
+            let scaledWidth = image.size.width * aspectRatio
+            let scaledHeight = image.size.height * aspectRatio
+            
+            let imageX = (pageRect.width - scaledWidth) / 2.0
+            let imageRect = CGRect(x: imageX, y: imageTop, width: scaledWidth, height: scaledHeight)
+            
+            image.draw(in: imageRect)
+            return imageRect.origin.y + imageRect.size.height
+        }
     
 }
