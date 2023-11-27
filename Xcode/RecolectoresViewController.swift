@@ -85,8 +85,8 @@ class RecolectoresViewController: UIViewController {
         }
 
         // Convertir las fechas a cadenas para la comparación
-        let startOfMonthString = dateFormatter.string(from: startOfMonth)
-        let endOfMonthString = dateFormatter.string(from: endOfMonth)
+        _ = dateFormatter.string(from: startOfMonth)
+        _ = dateFormatter.string(from: endOfMonth)
 
         // Conjunto para almacenar nombres únicos de recolectores
         var uniqueCollectorNames = Set<String>()

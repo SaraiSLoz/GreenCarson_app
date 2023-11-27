@@ -25,7 +25,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             self.performSegue(withIdentifier: "loginSeg", sender: self)
         }
 
-        // Do any additional setup after loading the view.
         user.returnKeyType = .next
         user.delegate = self
         password.returnKeyType = .go
@@ -84,7 +83,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             guard let self = self else { return }
 
-            if let error = error {
+            if error != nil {
                 self.showToast(message: "Correo o contraseña incorrectos")
             } else {
                 // Inicio de sesión exitoso

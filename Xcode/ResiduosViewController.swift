@@ -48,17 +48,29 @@ class ResiduosViewController: UIViewController  {
             return nil
         }
 
-        // Crea un renderizador de imágenes
-        let renderer = UIGraphicsImageRenderer(bounds: targetView.bounds)
-
-        // Renderiza la vista en una imagen
-        let image = renderer.image { context in
-            targetView.layer.render(in: context.cgContext)
+        // Crea un contexto de gráficos
+        UIGraphicsBeginImageContextWithOptions(targetView.bounds.size, false, 0.0)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            print("Error al obtener el contexto de gráficos.")
+            return nil
         }
+
+        // Renderiza la vista en el contexto de gráficos
+        targetView.layer.render(in: context)
+
+        // Obtiene la imagen del contexto de gráficos
+        guard let image = UIGraphicsGetImageFromCurrentImageContext() else {
+            print("Error al obtener la imagen del contexto de gráficos.")
+            UIGraphicsEndImageContext() 
+            return nil
+        }
+
+        // Finaliza el contexto de gráficos
+        UIGraphicsEndImageContext()
 
         return image
     }
-    
+
     // Funcion para crear un documento PDF
     @IBAction func saveDocumento(_ sender: Any) {
         // Obtén la fecha actual
