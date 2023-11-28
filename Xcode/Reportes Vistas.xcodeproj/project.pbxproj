@@ -27,6 +27,7 @@
 		A11211E12AD47454008C6E82 /* Perfil1ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11211E02AD47454008C6E82 /* Perfil1ViewController.swift */; };
 		A11211E32AD48967008C6E82 /* Perfil2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11211E22AD48967008C6E82 /* Perfil2ViewController.swift */; };
 		A11842E32B14574000EBA291 /* PDFCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11842E22B14574000EBA291 /* PDFCreator.swift */; };
+		A17A9C432B15EE5E006A2109 /* GradientLineChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A17A9C422B15EE5E006A2109 /* GradientLineChartView.swift */; };
 		A1C3CAB32B06DA4D00F98187 /* TimeHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C3CAB22B06DA4D00F98187 /* TimeHistory.swift */; };
 		A1C3CAB62B06DA8E00F98187 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A1C3CAB52B06DA8E00F98187 /* SnapKit */; };
 		A1C3CABA2B0E27C000F98187 /* AgeHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1C3CAB92B0E27C000F98187 /* AgeHistory.swift */; };
@@ -101,6 +102,7 @@
 		A11211E02AD47454008C6E82 /* Perfil1ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Perfil1ViewController.swift; sourceTree = "<group>"; };
 		A11211E22AD48967008C6E82 /* Perfil2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Perfil2ViewController.swift; sourceTree = "<group>"; };
 		A11842E22B14574000EBA291 /* PDFCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFCreator.swift; sourceTree = "<group>"; };
+		A17A9C422B15EE5E006A2109 /* GradientLineChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientLineChartView.swift; sourceTree = "<group>"; };
 		A1C3CAB22B06DA4D00F98187 /* TimeHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHistory.swift; sourceTree = "<group>"; };
 		A1C3CAB92B0E27C000F98187 /* AgeHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgeHistory.swift; sourceTree = "<group>"; };
 		A1C3CABB2B0E452600F98187 /* DoughnutChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoughnutChartView.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				A11842E22B14574000EBA291 /* PDFCreator.swift */,
+				A17A9C422B15EE5E006A2109 /* GradientLineChartView.swift */,
 				A1C3CACA2B0ED2EE00F98187 /* MaterialsChart.swift */,
 				A1C3CABD2B0E548100F98187 /* GoogleService-Info.plist */,
 				A1C3CABB2B0E452600F98187 /* DoughnutChartView.swift */,
@@ -384,6 +387,7 @@
 				A11211772AC943ED008C6E82 /* AppDelegate.swift in Sources */,
 				A10970A12AFB829C0067F53E /* areasMejoraViewController.swift in Sources */,
 				A1C3CABA2B0E27C000F98187 /* AgeHistory.swift in Sources */,
+				A17A9C432B15EE5E006A2109 /* GradientLineChartView.swift in Sources */,
 				A11211DF2AD24D2A008C6E82 /* MenuReportesViewController.swift in Sources */,
 				A11211792AC943ED008C6E82 /* SceneDelegate.swift in Sources */,
 				A10970A72AFB8BCC0067F53E /* ResiduosViewController.swift in Sources */,

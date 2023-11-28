@@ -101,7 +101,7 @@ struct MaterialsChart: View {
             }
     }
 
-    // Funcion para validar si un elemento es de la fecha actual
+    // Funcion para verificar la fecha actual
     func filterByCurrentMonth(dateString: String) -> Bool {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
@@ -111,10 +111,15 @@ struct MaterialsChart: View {
         }
         
         let calendar = Calendar.current
-        let currentMonth = calendar.component(.month, from: Date())
-        let recoleccionMonth = calendar.component(.month, from: date)
+        let currentDate = Date()
         
-        return currentMonth == recoleccionMonth
+        let currentMonth = calendar.component(.month, from: currentDate)
+        let currentYear = calendar.component(.year, from: currentDate)
+        
+        let recoleccionMonth = calendar.component(.month, from: date)
+        let recoleccionYear = calendar.component(.year, from: date)
+        
+        return currentMonth == recoleccionMonth && currentYear == recoleccionYear
     }
     
     // Funcion para actualizar la grafica local

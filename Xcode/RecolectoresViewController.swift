@@ -35,26 +35,70 @@ class RecolectoresViewController: UIViewController {
         showCollectorsInService()
     }
     
-    // Funcion para colocar grafica en pantalla
-    func setupView(){
-        
+    func setupView() {
         // Se utiliza el view respecto a su tag
-        guard let chartView = self.view.viewWithTag(2) else {
+        guard let chartContainerView = self.view.viewWithTag(2) else {
             return
         }
-        
-        let controller = UIHostingController(rootView: TimeHistory())
-        guard let timeView = controller.view else {
-            return
-        }
-        
-        chartView.addSubview(timeView)
-        
-        timeView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+
+        let db = Firestore.firestore()
+        let collection = db.collection("recolecciones")
+
+        var hourCounts: [Int: Int] = [:]
+
+        // Escuchar cambios en tiempo real
+        collection.addSnapshotListener { (snapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                return
+            }
+
+            // Limpiar datos antiguos
+            hourCounts.removeAll()
+
+            for document in snapshot!.documents {
+                guard let estadoRecoleccion = document["estado"] as? String,
+                      estadoRecoleccion == "Completada",
+                      let fechaRecoleccionString = document["fechaRecoleccion"] as? String,
+                      self.filterByCurrentMonth(dateString: fechaRecoleccionString) else {
+                    // Skip documents that don't meet the criteria
+                    continue
+                }
+
+                if let horaRecoleccionInicio = document["horaRecoleccionInicio"] as? String,
+                   let hourValue = Int(horaRecoleccionInicio.prefix(2)) {
+                    // Use only the first two characters of the hour string for grouping
+                    hourCounts[hourValue, default: 0] += 1
+                }
+            }
+
+            let tupleList = hourCounts.sorted { $0.key < $1.key }.map { (hour, recolectionCount) in
+                return (hour, recolectionCount)
+            }
+
+            // Eliminar las vistas antiguas antes de agregar la nueva
+            for subview in chartContainerView.subviews {
+                subview.removeFromSuperview()
+            }
+
+            // Crear la vista del gráfico con los datos obtenidos
+            let gradientLineChart = GradientLineChartView(data: tupleList)
+
+            // Añadir la vista del gráfico al chartContainerView
+            chartContainerView.addSubview(gradientLineChart)
+
+            // Establecer las restricciones para la vista del gráfico usando AutoLayout
+            gradientLineChart.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                gradientLineChart.topAnchor.constraint(equalTo: chartContainerView.topAnchor),
+                gradientLineChart.leadingAnchor.constraint(equalTo: chartContainerView.leadingAnchor),
+                gradientLineChart.trailingAnchor.constraint(equalTo: chartContainerView.trailingAnchor),
+                gradientLineChart.bottomAnchor.constraint(equalTo: chartContainerView.bottomAnchor)
+            ])
         }
     }
     
+    //Grafica rerecolectores activos
     func setupView2(){
         // Se utiliza el view respecto a su tag
         guard let chartContainerView = self.view.viewWithTag(1) else {
@@ -99,6 +143,28 @@ class RecolectoresViewController: UIViewController {
             }
         }
     }
+    
+    // Funcion para verificar la fecha actual
+    func filterByCurrentMonth(dateString: String) -> Bool {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+        
+        guard let date = dateFormatter.date(from: dateString) else {
+            return false
+        }
+        
+        let calendar = Calendar.current
+        let currentDate = Date()
+        
+        let currentMonth = calendar.component(.month, from: currentDate)
+        let currentYear = calendar.component(.year, from: currentDate)
+        
+        let recoleccionMonth = calendar.component(.month, from: date)
+        let recoleccionYear = calendar.component(.year, from: date)
+        
+        return currentMonth == recoleccionMonth && currentYear == recoleccionYear
+    }
+
     
     // Funcion para mostrar el numero de recolectores en total
     func showCollectors() {
