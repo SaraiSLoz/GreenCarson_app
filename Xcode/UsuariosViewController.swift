@@ -21,7 +21,7 @@ class UsuariosViewController: UIViewController {
         navigationItem.backBarButtonItem = backButton
         
         setupView()
-        setupView2()
+        setUpStatusView()
     }
     
     func setupView(){
@@ -44,13 +44,14 @@ class UsuariosViewController: UIViewController {
         
     }
     
-    func setupView2(){
+    // Funcion encargada de mostrar la grafica de estado de usuarios
+    func setUpStatusView(){
         // Se utiliza el view respecto a su tag
         guard let chartContainerView = self.view.viewWithTag(2) else {
             return
         }
 
-        // Tu código para obtener datos de Firestore y crear el gráfico
+        // Obtener datos de Firestore y crear el gráfico
         db.collection("usuarios").getDocuments { [weak self] (snapshot, error) in
             guard self != nil else { return }
 
@@ -121,6 +122,26 @@ class UsuariosViewController: UIViewController {
 
     // Funcion para crear un documento PDF
     @IBAction func saveDocument(_ sender: Any) {
+        // Crear una alerta para solicitar permiso
+        let alertController = UIAlertController(
+            title: "Descargar Documento",
+            message: "¿Estás seguro de que deseas descargar este documento?",
+            preferredStyle: .alert
+        )
+
+        // Añadir acciones a la alerta
+        alertController.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: nil))
+
+        alertController.addAction(UIAlertAction(title: "Descargar", style: .default, handler: { [weak self] _ in
+            // Procede con la descarga y guardado del documento
+            self?.performSaveDocument()
+        }))
+
+        // Presentar la alerta
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func performSaveDocument() {
         // Obtén la fecha actual
         let currentDate = Date()
         let dateFormatter = DateFormatter()

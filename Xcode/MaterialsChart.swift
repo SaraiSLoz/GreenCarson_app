@@ -13,6 +13,7 @@ struct MaterialModel: Identifiable {
 // Estructura para la grafica de materiales
 struct MaterialsChart: View {
     @State private var materialsList: [MaterialModel] = []
+    @State private var zoomed: Bool = false
 
     var body: some View {
         VStack {
@@ -20,6 +21,18 @@ struct MaterialsChart: View {
                 Text("Loading data...")
             } else {
                 BarChartView(data: materialsList)
+                    .gesture(
+                        MagnificationGesture()
+                            .onChanged { value in
+                                // Si el usuario realiza un gesto de pellizco, permite hacer zoom
+                                zoomed = true
+                            }
+                            .onEnded { value in
+                                // Restaura el zoom a su estado original
+                                zoomed = false
+                            }
+                    )
+                    .scaleEffect(x: zoomed ? 2.0 : 1.0, y: 1.0) // Ajusta el valor de zoom según tus necesidades
             }
         }
         .onAppear {
@@ -83,7 +96,7 @@ struct MaterialsChart: View {
                     // Accede al campo "fechaRecoleccion"
                     if let fechaRecoleccion = document["fechaRecoleccion"] as? String {
                         // Filtra por el mes actual
-                        if filterByCurrentMonth(dateString: fechaRecoleccion) {
+                        if filterByLast30Days(dateString: fechaRecoleccion) {
                             // Accede al campo "materiales" que es un mapa
                             if let materiales = document["materiales"] as? [String: [String: Any]] {
                                 // Itera a través de los materiales y actualiza la cantidad en materialsList
@@ -102,26 +115,24 @@ struct MaterialsChart: View {
     }
 
     // Funcion para verificar la fecha actual
-    func filterByCurrentMonth(dateString: String) -> Bool {
+    func filterByLast30Days(dateString: String) -> Bool {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
-        
+
         guard let date = dateFormatter.date(from: dateString) else {
             return false
         }
-        
+
         let calendar = Calendar.current
         let currentDate = Date()
-        
-        let currentMonth = calendar.component(.month, from: currentDate)
-        let currentYear = calendar.component(.year, from: currentDate)
-        
-        let recoleccionMonth = calendar.component(.month, from: date)
-        let recoleccionYear = calendar.component(.year, from: date)
-        
-        return currentMonth == recoleccionMonth && currentYear == recoleccionYear
+
+        if let last30Days = calendar.date(byAdding: .day, value: -30, to: currentDate) {
+            return date >= last30Days && date <= currentDate
+        }
+
+        return false
     }
-    
+
     // Funcion para actualizar la grafica local
     func updateMaterialCount(nombre: String, cantidad: Int) {
         // Convierte a minúsculas para comparación sin distinción entre mayúsculas y minúsculas
@@ -167,8 +178,9 @@ struct BarChartView: View {
                     }
                 }
             }
-
+            .foregroundStyle(by: .value("Nombre", materialModel.id))
         }
+        .chartLegend(.hidden)
         .chartXAxisLabel("Nombre")
         .chartYAxisLabel("Cantidad")
         .chartXScale(domain: 0...(max + 2))

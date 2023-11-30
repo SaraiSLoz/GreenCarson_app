@@ -73,6 +73,26 @@ class ResiduosViewController: UIViewController  {
 
     // Funcion para crear un documento PDF
     @IBAction func saveDocumento(_ sender: Any) {
+        // Crear una alerta para solicitar permiso
+        let alertController = UIAlertController(
+            title: "Descargar Documento",
+            message: "¿Estás seguro de que deseas descargar este documento?",
+            preferredStyle: .alert
+        )
+
+        // Añadir acciones a la alerta
+        alertController.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: nil))
+
+        alertController.addAction(UIAlertAction(title: "Descargar", style: .default, handler: { [weak self] _ in
+            // Procede con la descarga y guardado del documento
+            self?.performSaveDocument()
+        }))
+
+        // Presentar la alerta
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func performSaveDocument() {
         // Obtén la fecha actual
         let currentDate = Date()
         let dateFormatter = DateFormatter()

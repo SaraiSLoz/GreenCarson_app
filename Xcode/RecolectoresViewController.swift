@@ -60,7 +60,7 @@ class RecolectoresViewController: UIViewController {
                 guard let estadoRecoleccion = document["estado"] as? String,
                       estadoRecoleccion == "Completada",
                       let fechaRecoleccionString = document["fechaRecoleccion"] as? String,
-                      self.filterByCurrentMonth(dateString: fechaRecoleccionString) else {
+                      self.filterByLast30Days(dateString: fechaRecoleccionString) else {
                     // Skip documents that don't meet the criteria
                     continue
                 }
@@ -144,27 +144,24 @@ class RecolectoresViewController: UIViewController {
         }
     }
     
-    // Funcion para verificar la fecha actual
-    func filterByCurrentMonth(dateString: String) -> Bool {
+    // Funcion para verificar el intervalo de 30 dias
+    func filterByLast30Days(dateString: String) -> Bool {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
-        
+
         guard let date = dateFormatter.date(from: dateString) else {
             return false
         }
-        
+
         let calendar = Calendar.current
         let currentDate = Date()
-        
-        let currentMonth = calendar.component(.month, from: currentDate)
-        let currentYear = calendar.component(.year, from: currentDate)
-        
-        let recoleccionMonth = calendar.component(.month, from: date)
-        let recoleccionYear = calendar.component(.year, from: date)
-        
-        return currentMonth == recoleccionMonth && currentYear == recoleccionYear
-    }
 
+        if let last30Days = calendar.date(byAdding: .day, value: -30, to: currentDate) {
+            return date >= last30Days && date <= currentDate
+        }
+
+        return false
+    }
     
     // Funcion para mostrar el numero de recolectores en total
     func showCollectors() {
@@ -279,6 +276,26 @@ class RecolectoresViewController: UIViewController {
     // Funcion para crear un documento PDF
 
     @IBAction func savePDF(_ sender: Any) {
+        // Crear una alerta para solicitar permiso
+        let alertController = UIAlertController(
+            title: "Descargar Documento",
+            message: "¿Estás seguro de que deseas descargar este documento?",
+            preferredStyle: .alert
+        )
+
+        // Añadir acciones a la alerta
+        alertController.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: nil))
+
+        alertController.addAction(UIAlertAction(title: "Descargar", style: .default, handler: { [weak self] _ in
+            // Procede con la descarga y guardado del documento
+            self?.performSaveDocument()
+        }))
+
+        // Presentar la alerta
+        present(alertController, animated: true, completion: nil)
+    }
+
+    func performSaveDocument() {
         // Obtén la fecha actual
         let currentDate = Date()
         let dateFormatter = DateFormatter()
@@ -289,7 +306,7 @@ class RecolectoresViewController: UIViewController {
 
         let pdfCreator = PDFCreator(
             title: "Recolectores",
-            body: "Fecha de descarga: \(dateString)",
+            body: "Fecha de descarga: \(dateString)\nRecolectores en servicio: \(recolectoresServicio.text ?? "N/A")\nRecolectores registrados: \(numRecolectores.text ?? "N/A")",
             images: [image, image2],
             contact: ""
         )

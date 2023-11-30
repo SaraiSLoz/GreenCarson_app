@@ -64,6 +64,6 @@ class GradientLineChartView: UIView {
         yAxis.axisLineColor = .black
         
         // Add animation
-        chartView.animate(xAxisDuration: 1.5)
+        chartView.animate(xAxisDuration: 1.0)
     }
 }

@@ -83,19 +83,40 @@ class ViewController: UIViewController, UITextFieldDelegate {
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
             guard let self = self else { return }
 
-            if error != nil {
-                self.showToast(message: "Correo o contraseña incorrectos")
+            if let error = error {
+                self.showToast(message: "Correo o contraseña incorrectos: \(error.localizedDescription)")
             } else {
-                // Inicio de sesión exitoso
-                if Auth.auth().currentUser != nil {
-                    // Guardar el estado de la sesión
-                    self.saveSessionState()
-                    // El usuario está autenticado, puedes pasar a la siguiente vista o realizar otras acciones
-                    self.performSegue(withIdentifier: "loginSeg", sender: self)
+                // Successful login
+                if let user = Auth.auth().currentUser {
+                    // Check if the user is also an administrator
+                    self.checkIfUserIsAdministrator(userId: user.uid)
                 }
             }
         }
     }
+
+    private func checkIfUserIsAdministrator(userId: String) {
+        let db = Firestore.firestore()
+        
+        db.collection("administradores").document(userId).getDocument { [weak self] (document, error) in
+            guard let self = self else { return }
+
+            if let document = document, document.exists {
+                self.saveSessionState()
+                self.performSegue(withIdentifier: "loginSeg", sender: self)
+            } else {
+                self.showPermissionDeniedPopup()
+            }
+        }
+    }
+
+    private func showPermissionDeniedPopup() {
+        print("No tienes permiso para acceder")
+        let alertController = UIAlertController(title: "Acceso denegado", message: "No tienes permisos para acceder", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Aceptar", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
+
 
     private func showToast(message: String) {
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
