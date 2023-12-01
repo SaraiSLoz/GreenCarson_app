@@ -6,7 +6,7 @@ class SplashScreenViewController: UIViewController {
         addGradient()
         addImageView()
         addTextLabel()
-        
+        addTitle()
         // Simular una carga de 2 segundos y luego pasar a la pantalla principal
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.checkSessionStateAndNavigate()
@@ -51,6 +51,17 @@ class SplashScreenViewController: UIViewController {
         view.addSubview(imageView)
     }
 
+    func addTitle() {
+        let largeLabel = UILabel()
+        largeLabel.text = "Reeportes"
+        largeLabel.textColor = .white
+        largeLabel.font = UIFont.boldSystemFont(ofSize: 24)
+        largeLabel.textAlignment = .center
+        largeLabel.frame = CGRect(x: 0, y: 0, width: view.frame.width - 40, height: 80)
+        largeLabel.center = CGPoint(x: view.center.x, y: view.center.y + 80)
+        view.addSubview(largeLabel)
+    }
+    
     func addTextLabel() {
         let label = UILabel()
         label.text = "By 3BIT"

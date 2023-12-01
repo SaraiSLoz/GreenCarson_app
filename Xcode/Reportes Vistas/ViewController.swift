@@ -51,8 +51,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
         gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
 
-        // Asegurar que el gradiente abarque desde la mitad hacia abajo
-        gradientLayer.frame = CGRect(x: 0, y: view.bounds.height * 0.15, width: view.bounds.width, height: view.bounds.height * 0.65)
+        gradientLayer.frame = CGRect(x: 0, y: view.bounds.height * 0.135, width: view.bounds.width, height: view.bounds.height * 0.65)
 
         // Insertar el gradiente como la primera capa de la vista
         view.layer.insertSublayer(gradientLayer, at: 1)

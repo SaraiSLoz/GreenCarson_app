@@ -28,6 +28,9 @@ class MenuReportesViewController: UIViewController {
             userButton.setImage(resizedImage.withRenderingMode(.alwaysOriginal), for: .normal)
             userButton.imageView?.contentMode = .scaleAspectFit
         }
+        userButton.isUserInteractionEnabled = true
+        navigationController?.navigationBar.isUserInteractionEnabled = false
+        view.bringSubviewToFront(userButton)
     }
 
     // Funcion para cambiar medidas de imagen del boton
@@ -48,5 +51,6 @@ class MenuReportesViewController: UIViewController {
 
         return newImage!
     }
+
 
 }

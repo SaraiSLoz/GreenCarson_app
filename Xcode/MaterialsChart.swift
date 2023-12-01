@@ -135,20 +135,28 @@ struct MaterialsChart: View {
 
     // Funcion para actualizar la grafica local
     func updateMaterialCount(nombre: String, cantidad: Int) {
-        // Convierte a minúsculas para comparación sin distinción entre mayúsculas y minúsculas
-        let lowercaseNombre = nombre.lowercased()
+        // Función para quitar acentos y diacríticos de una cadena
+        func removeAccents(_ input: String) -> String {
+            let folded = input.folding(options: .diacriticInsensitive, locale: .current)
+            return folded
+        }
+
+        // Convierte a minúsculas y quita acentos para comparación sin distinción entre mayúsculas y minúsculas
+        let lowercaseNombre = removeAccents(nombre.lowercased())
+
         // Busca el MaterialModel correspondiente en la lista
-        if let index = materialsList.firstIndex(where: { $0.id.lowercased() == lowercaseNombre }) {
+        if let index = materialsList.firstIndex(where: { removeAccents($0.id.lowercased()) == lowercaseNombre }) {
             // Si se encuentra, incrementa la cantidad
             materialsList[index].cantidad += cantidad
         } else {
             // Si no se encuentra, incrementa la cantidad de "otro"
-            if let otroIndex = materialsList.firstIndex(where: { $0.id == "otro" }) {
+            if let otroIndex = materialsList.firstIndex(where: { removeAccents($0.id) == "otro" }) {
                 materialsList[otroIndex].cantidad += cantidad
                 print("Analizando material:", lowercaseNombre)
             }
         }
     }
+
 }
 
 // Esctructura de grafica de barras
