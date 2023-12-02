@@ -1,8 +1,6 @@
 // AgeHistory.swift
 // Reportes Vistas
-//
-// Created by Diego Tomé Guardado on 16/11/23.
-//
+
 import SwiftUI
 import Charts
 import FirebaseFirestore

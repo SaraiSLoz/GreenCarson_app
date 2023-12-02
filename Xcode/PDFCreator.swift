@@ -1,9 +1,6 @@
 //
 //  PDFCreator.swift
 //  Reportes Vistas
-//
-//  Created by Diego Tomé Guardado on 26/11/23.
-//
 
 import UIKit
 import PDFKit

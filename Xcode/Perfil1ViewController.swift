@@ -1,9 +1,7 @@
 //
 //  Perfil1ViewController.swift
 //  Reportes Vistas
-//
-//  Created by Diego Tomé Guardado on 09/10/23.
-//
+
 
 import UIKit
 import Firebase

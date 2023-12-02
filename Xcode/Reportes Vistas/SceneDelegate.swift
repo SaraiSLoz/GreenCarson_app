@@ -1,9 +1,6 @@
 //
 //  SceneDelegate.swift
 //  Reportes Vistas
-//
-//  Created by Diego Tomé Guardado on 01/10/23.
-//
 
 import UIKit
 

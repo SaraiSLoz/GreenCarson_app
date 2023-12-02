@@ -1,9 +1,6 @@
 //
 //  MenuReportesViewController.swift
 //  Reportes Vistas
-//
-//  Created by Diego Tomé Guardado on 07/10/23.
-//
 
 import UIKit
     

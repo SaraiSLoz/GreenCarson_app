@@ -1,9 +1,7 @@
 //
 //  UsuariosViewController.swift
 //  Reportes Vistas
-//
-//  Created by Diego Tomé Guardado on 08/11/23.
-//
+
 
 import UIKit
 import SwiftUI
